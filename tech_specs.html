@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Specifications - Brainrot Blast</title>
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #00D4FF;
+            --accent: #FF1493;
+            --bg: #f8f9fa;
+            --text: #333333;
+            --code-bg: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 2px solid white;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .toc {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .toc h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            columns: 2;
+        }
+
+        .toc li {
+            padding: 5px 0;
+        }
+
+        .toc a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 25px 0 15px;
+        }
+
+        h4 {
+            color: #666;
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+            background: #f0f0f0;
+        }
+
+        code {
+            background: var(--code-bg);
+            color: #9cdcfe;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        pre code {
+            padding: 0;
+            background: none;
+            color: inherit;
+        }
+
+        .code-keyword { color: #569cd6; }
+        .code-type { color: #4ec9b0; }
+        .code-string { color: #ce9178; }
+        .code-comment { color: #6a9955; }
+        .code-number { color: #b5cea8; }
+        .code-property { color: #9cdcfe; }
+
+        .file-tree {
+            background: var(--code-bg);
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .file-tree .folder { color: #dcdc8b; }
+        .file-tree .file { color: #9cdcfe; }
+
+        ul, ol {
+            margin: 15px 0 15px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(255,20,147,0.1));
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .checklist li::before {
+            content: "[ ]";
+            color: var(--secondary);
+            margin-right: 10px;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .toc ul {
+                columns: 1;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Technical Specifications</h1>
+            <a href="index.html" class="back-btn">Back to Docs</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#stack">1. Technology Stack</a></li>
+                <li><a href="#structure">2. Project Structure</a></li>
+                <li><a href="#models">3. Data Models</a></li>
+                <li><a href="#systems">4. Core Systems</a></li>
+                <li><a href="#flame">5. Flame Game Structure</a></li>
+                <li><a href="#ads">6. Ad Integration</a></li>
+                <li><a href="#storage">7. Local Storage</a></li>
+                <li><a href="#daily">8. Daily Systems</a></li>
+                <li><a href="#performance">9. Performance</a></li>
+                <li><a href="#testing">10. Testing</a></li>
+                <li><a href="#build">11. Build Configuration</a></li>
+                <li><a href="#deployment">12. Deployment Checklist</a></li>
+            </ul>
+        </div>
+
+        <section id="stack">
+            <h2>1. Technology Stack</h2>
+
+            <h3>1.1 Core Framework</h3>
+            <table>
+                <tr><th>Component</th><th>Technology</th><th>Version</th></tr>
+                <tr><td>Framework</td><td>Flutter</td><td>3.x (latest stable)</td></tr>
+                <tr><td>Language</td><td>Dart</td><td>3.x</td></tr>
+                <tr><td>Game Engine</td><td>Flame</td><td>1.x</td></tr>
+                <tr><td>State Management</td><td>Riverpod or Provider</td><td>Latest</td></tr>
+                <tr><td>Local Storage</td><td>Hive</td><td>2.x</td></tr>
+            </table>
+
+            <h3>1.2 Dependencies</h3>
+            <pre><code><span class="code-comment"># pubspec.yaml</span>
+<span class="code-property">dependencies</span>:
+  <span class="code-property">flutter</span>:
+    <span class="code-property">sdk</span>: flutter
+
+  <span class="code-comment"># Game Engine</span>
+  <span class="code-property">flame</span>: ^<span class="code-number">1.14.0</span>
+
+  <span class="code-comment"># State Management</span>
+  <span class="code-property">flutter_riverpod</span>: ^<span class="code-number">2.4.0</span>
+
+  <span class="code-comment"># Local Storage</span>
+  <span class="code-property">hive</span>: ^<span class="code-number">2.2.3</span>
+  <span class="code-property">hive_flutter</span>: ^<span class="code-number">1.1.0</span>
+
+  <span class="code-comment"># Ads</span>
+  <span class="code-property">google_mobile_ads</span>: ^<span class="code-number">4.0.0</span>
+
+  <span class="code-comment"># Audio</span>
+  <span class="code-property">audioplayers</span>: ^<span class="code-number">5.2.0</span>
+
+  <span class="code-comment"># Utilities</span>
+  <span class="code-property">shared_preferences</span>: ^<span class="code-number">2.2.0</span>
+  <span class="code-property">intl</span>: ^<span class="code-number">0.18.0</span>
+  <span class="code-property">uuid</span>: ^<span class="code-number">4.2.0</span>
+
+<span class="code-property">dev_dependencies</span>:
+  <span class="code-property">flutter_test</span>:
+    <span class="code-property">sdk</span>: flutter
+  <span class="code-property">hive_generator</span>: ^<span class="code-number">2.0.1</span>
+  <span class="code-property">build_runner</span>: ^<span class="code-number">2.4.0</span>
+  <span class="code-property">flutter_lints</span>: ^<span class="code-number">3.0.0</span></code></pre>
+        </section>
+
+        <section id="structure">
+            <h2>2. Project Structure</h2>
+            <div class="file-tree"><span class="folder">lib/</span>
+├── main.dart                    <span class="code-comment"># App entry point</span>
+├── app.dart                     <span class="code-comment"># MaterialApp configuration</span>
+│
+├── <span class="folder">config/</span>
+│   ├── <span class="file">constants.dart</span>           <span class="code-comment"># Game constants</span>
+│   ├── <span class="file">theme.dart</span>               <span class="code-comment"># App theme/colors</span>
+│   └── <span class="file">routes.dart</span>              <span class="code-comment"># Navigation routes</span>
+│
+├── <span class="folder">models/</span>
+│   ├── <span class="file">game_state.dart</span>          <span class="code-comment"># Current game state</span>
+│   ├── <span class="file">level.dart</span>               <span class="code-comment"># Level configuration</span>
+│   ├── <span class="file">tile.dart</span>                <span class="code-comment"># Game tile model</span>
+│   ├── <span class="file">brainrot.dart</span>            <span class="code-comment"># Brainrot character model</span>
+│   ├── <span class="file">player_progress.dart</span>     <span class="code-comment"># Player save data</span>
+│   └── <span class="file">daily_reward.dart</span>        <span class="code-comment"># Daily reward model</span>
+│
+├── <span class="folder">services/</span>
+│   ├── <span class="file">storage_service.dart</span>     <span class="code-comment"># Hive local storage</span>
+│   ├── <span class="file">audio_service.dart</span>       <span class="code-comment"># Sound/music manager</span>
+│   ├── <span class="file">ad_service.dart</span>          <span class="code-comment"># AdMob integration</span>
+│   └── <span class="file">level_generator.dart</span>     <span class="code-comment"># Procedural level generation</span>
+│
+├── <span class="folder">game/</span>
+│   ├── <span class="file">brainrot_game.dart</span>       <span class="code-comment"># Main Flame game class</span>
+│   ├── <span class="folder">components/</span>
+│   │   ├── <span class="file">board.dart</span>           <span class="code-comment"># Game board component</span>
+│   │   ├── <span class="file">tile_component.dart</span>  <span class="code-comment"># Individual tile</span>
+│   │   ├── <span class="file">particle_effects.dart</span><span class="code-comment"># Blast/match effects</span>
+│   │   └── <span class="file">mascot.dart</span>          <span class="code-comment"># Pet mascot display</span>
+│   └── <span class="folder">systems/</span>
+│       ├── <span class="file">match_system.dart</span>    <span class="code-comment"># Match detection logic</span>
+│       ├── <span class="file">cascade_system.dart</span>  <span class="code-comment"># Tile falling logic</span>
+│       └── <span class="file">score_system.dart</span>    <span class="code-comment"># Score calculation</span>
+│
+├── <span class="folder">providers/</span>
+│   ├── <span class="file">game_provider.dart</span>       <span class="code-comment"># Game state provider</span>
+│   ├── <span class="file">player_provider.dart</span>     <span class="code-comment"># Player progress provider</span>
+│   ├── <span class="file">collection_provider.dart</span> <span class="code-comment"># Brainrot collection</span>
+│   └── <span class="file">settings_provider.dart</span>   <span class="code-comment"># App settings</span>
+│
+├── <span class="folder">screens/</span>
+│   ├── <span class="file">home_screen.dart</span>         <span class="code-comment"># Main menu</span>
+│   ├── <span class="file">game_screen.dart</span>         <span class="code-comment"># Gameplay screen</span>
+│   ├── <span class="file">collection_screen.dart</span>   <span class="code-comment"># Brainrot gallery</span>
+│   └── <span class="file">settings_screen.dart</span>     <span class="code-comment"># Settings modal</span>
+│
+├── <span class="folder">widgets/</span>
+│   ├── <span class="folder">common/</span>
+│   │   ├── <span class="file">game_button.dart</span>     <span class="code-comment"># Styled button</span>
+│   │   ├── <span class="file">currency_display.dart</span><span class="code-comment"># Coins/gems display</span>
+│   │   └── <span class="file">brainrot_card.dart</span>   <span class="code-comment"># Collection card</span>
+│   ├── <span class="folder">dialogs/</span>
+│   │   ├── <span class="file">level_complete_dialog.dart</span>
+│   │   ├── <span class="file">level_failed_dialog.dart</span>
+│   │   ├── <span class="file">daily_reward_dialog.dart</span>
+│   │   ├── <span class="file">spin_wheel_dialog.dart</span>
+│   │   └── <span class="file">unlock_brainrot_dialog.dart</span>
+│   └── <span class="folder">game/</span>
+│       ├── <span class="file">game_hud.dart</span>        <span class="code-comment"># In-game UI overlay</span>
+│       ├── <span class="file">objective_display.dart</span>
+│       └── <span class="file">move_counter.dart</span>
+│
+└── <span class="folder">utils/</span>
+    ├── <span class="file">extensions.dart</span>          <span class="code-comment"># Dart extensions</span>
+    ├── <span class="file">helpers.dart</span>             <span class="code-comment"># Utility functions</span>
+    └── <span class="file">validators.dart</span>          <span class="code-comment"># Input validation</span>
+
+<span class="folder">assets/</span>
+├── <span class="folder">images/</span>
+│   ├── <span class="folder">brainrots/</span>              <span class="code-comment"># Full character images</span>
+│   ├── <span class="folder">icons/</span>                  <span class="code-comment"># Game board icons</span>
+│   ├── <span class="folder">ui/</span>                     <span class="code-comment"># UI elements</span>
+│   └── <span class="folder">backgrounds/</span>            <span class="code-comment"># Screen backgrounds</span>
+├── <span class="folder">audio/</span>
+│   ├── <span class="folder">sfx/</span>                    <span class="code-comment"># Sound effects</span>
+│   └── <span class="folder">music/</span>                  <span class="code-comment"># Background music</span>
+└── <span class="folder">fonts/</span>                      <span class="code-comment"># Custom fonts</span></div>
+        </section>
+
+        <section id="models">
+            <h2>3. Data Models</h2>
+
+            <h3>3.1 Player Progress (Hive)</h3>
+            <pre><code><span class="code-keyword">@HiveType</span>(typeId: <span class="code-number">0</span>)
+<span class="code-keyword">class</span> <span class="code-type">PlayerProgress</span> <span class="code-keyword">extends</span> <span class="code-type">HiveObject</span> {
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">0</span>)
+  <span class="code-type">int</span> currentLevel;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">1</span>)
+  <span class="code-type">int</span> coins;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">2</span>)
+  <span class="code-type">int</span> gems;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">3</span>)
+  <span class="code-type">int</span> lives;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">4</span>)
+  <span class="code-type">DateTime</span> lastLifeRefill;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">5</span>)
+  <span class="code-type">List</span>&lt;<span class="code-type">String</span>&gt; unlockedBrainrots;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">6</span>)
+  <span class="code-type">String</span>? equippedBrainrot;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">7</span>)
+  <span class="code-type">int</span> dailyStreak;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">8</span>)
+  <span class="code-type">DateTime</span>? lastDailyReward;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">9</span>)
+  <span class="code-type">DateTime</span>? lastDailySpin;
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">10</span>)
+  <span class="code-type">Map</span>&lt;<span class="code-type">int</span>, <span class="code-type">int</span>&gt; levelStars; <span class="code-comment">// levelNumber: stars</span>
+
+  <span class="code-keyword">@HiveField</span>(<span class="code-number">11</span>)
+  <span class="code-type">int</span> totalScore;
+}</code></pre>
+
+            <h3>3.2 Brainrot Character</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">Brainrot</span> {
+  <span class="code-keyword">final</span> <span class="code-type">String</span> id;
+  <span class="code-keyword">final</span> <span class="code-type">String</span> name;
+  <span class="code-keyword">final</span> <span class="code-type">String</span> imagePath;
+  <span class="code-keyword">final</span> <span class="code-type">String</span> iconPath;
+  <span class="code-keyword">final</span> <span class="code-type">BrainrotRarity</span> rarity;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> unlockLevel; <span class="code-comment">// 0 = not level-locked</span>
+
+  <span class="code-keyword">const</span> <span class="code-type">Brainrot</span>({
+    <span class="code-keyword">required</span> <span class="code-keyword">this</span>.id,
+    <span class="code-keyword">required</span> <span class="code-keyword">this</span>.name,
+    <span class="code-keyword">required</span> <span class="code-keyword">this</span>.imagePath,
+    <span class="code-keyword">required</span> <span class="code-keyword">this</span>.iconPath,
+    <span class="code-keyword">required</span> <span class="code-keyword">this</span>.rarity,
+    <span class="code-keyword">this</span>.unlockLevel = <span class="code-number">0</span>,
+  });
+}
+
+<span class="code-keyword">enum</span> <span class="code-type">BrainrotRarity</span> { common, rare, epic, legendary }</code></pre>
+
+            <h3>3.3 Level Configuration</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">LevelConfig</span> {
+  <span class="code-keyword">final</span> <span class="code-type">int</span> levelNumber;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> gridWidth;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> gridHeight;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> maxMoves;
+  <span class="code-keyword">final</span> <span class="code-type">List</span>&lt;<span class="code-type">LevelObjective</span>&gt; objectives;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> iconTypeCount;
+  <span class="code-keyword">final</span> <span class="code-type">List</span>&lt;<span class="code-type">BlockerConfig</span>&gt; blockers;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> seed; <span class="code-comment">// For reproducible generation</span>
+
+  <span class="code-comment">// Generated from level number</span>
+  <span class="code-keyword">factory</span> <span class="code-type">LevelConfig</span>.generate(<span class="code-type">int</span> levelNumber) {
+    <span class="code-comment">// Procedural generation logic</span>
+  }
+}
+
+<span class="code-keyword">enum</span> <span class="code-type">ObjectiveType</span> { score, collectIcon, clearBlockers, combos }</code></pre>
+
+            <h3>3.4 Game Tile</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">GameTile</span> {
+  <span class="code-keyword">final</span> <span class="code-type">String</span> iconId;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> row;
+  <span class="code-keyword">final</span> <span class="code-type">int</span> col;
+  <span class="code-keyword">final</span> <span class="code-type">TileState</span> state;
+  <span class="code-keyword">final</span> <span class="code-type">TileModifier</span>? modifier;
+
+  <span class="code-type">GameTile</span> copyWith({...});
+}
+
+<span class="code-keyword">enum</span> <span class="code-type">TileState</span> { normal, matched, falling, locked }
+<span class="code-keyword">enum</span> <span class="code-type">TileModifier</span> { none, ice, crate, chain }</code></pre>
+        </section>
+
+        <section id="systems">
+            <h2>4. Core Systems</h2>
+
+            <h3>4.1 Level Generator Algorithm</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">LevelGenerator</span> {
+  <span class="code-type">LevelConfig</span> generate(<span class="code-type">int</span> levelNumber) {
+    <span class="code-keyword">final</span> seed = levelNumber * <span class="code-number">12345</span>; <span class="code-comment">// Deterministic seed</span>
+    <span class="code-keyword">final</span> random = <span class="code-type">Random</span>(seed);
+
+    <span class="code-comment">// Calculate difficulty parameters</span>
+    <span class="code-keyword">final</span> difficulty = _calculateDifficulty(levelNumber);
+
+    <span class="code-keyword">return</span> <span class="code-type">LevelConfig</span>(
+      levelNumber: levelNumber,
+      gridWidth: difficulty.gridWidth,
+      gridHeight: difficulty.gridHeight,
+      maxMoves: difficulty.maxMoves,
+      objectives: _generateObjectives(difficulty, random),
+      iconTypeCount: difficulty.iconTypes,
+      blockers: _generateBlockers(difficulty, random),
+      seed: seed,
+    );
+  }
+
+  <span class="code-type">DifficultyParams</span> _calculateDifficulty(<span class="code-type">int</span> level) {
+    <span class="code-keyword">if</span> (level <= <span class="code-number">25</span>) {
+      <span class="code-keyword">return</span> <span class="code-type">DifficultyParams</span>(
+        gridWidth: <span class="code-number">5</span>, gridHeight: <span class="code-number">5</span>,
+        maxMoves: <span class="code-number">25</span> - (level ~/ <span class="code-number">5</span>),
+        iconTypes: <span class="code-number">5</span>,
+        objectiveCount: <span class="code-number">1</span>,
+        blockerChance: <span class="code-number">0</span>,
+      );
+    } <span class="code-keyword">else if</span> (level <= <span class="code-number">50</span>) {
+      <span class="code-comment">// Medium difficulty...</span>
+    }
+    <span class="code-comment">// ... continues for all tiers</span>
+  }
+}</code></pre>
+
+            <h3>4.2 Match Detection System</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">MatchSystem</span> {
+  <span class="code-type">List</span>&lt;<span class="code-type">Match</span>&gt; findMatches(<span class="code-type">List</span>&lt;<span class="code-type">List</span>&lt;<span class="code-type">GameTile</span>&gt;&gt; grid) {
+    <span class="code-keyword">final</span> matches = &lt;<span class="code-type">Match</span>&gt;[];
+
+    <span class="code-comment">// Horizontal matches</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> row = <span class="code-number">0</span>; row < grid.length; row++) {
+      matches.addAll(_findLineMatches(
+        grid[row], isHorizontal: <span class="code-keyword">true</span>, row: row
+      ));
+    }
+
+    <span class="code-comment">// Vertical matches</span>
+    <span class="code-keyword">for</span> (<span class="code-type">int</span> col = <span class="code-number">0</span>; col < grid[<span class="code-number">0</span>].length; col++) {
+      <span class="code-keyword">final</span> column = grid.map((row) => row[col]).toList();
+      matches.addAll(_findLineMatches(
+        column, isHorizontal: <span class="code-keyword">false</span>, col: col
+      ));
+    }
+
+    <span class="code-keyword">return</span> _mergeOverlappingMatches(matches);
+  }
+
+  <span class="code-type">SpecialTile</span>? determineSpecialTile(<span class="code-type">Match</span> match) {
+    <span class="code-keyword">if</span> (match.tiles.length >= <span class="code-number">6</span>) <span class="code-keyword">return</span> <span class="code-type">SpecialTile</span>.superBomb;
+    <span class="code-keyword">if</span> (match.tiles.length == <span class="code-number">5</span>) <span class="code-keyword">return</span> <span class="code-type">SpecialTile</span>.rainbow;
+    <span class="code-keyword">if</span> (match.isSquare) <span class="code-keyword">return</span> <span class="code-type">SpecialTile</span>.bomb;
+    <span class="code-keyword">if</span> (match.tiles.length == <span class="code-number">4</span>) <span class="code-keyword">return</span> <span class="code-type">SpecialTile</span>.lineBlast;
+    <span class="code-keyword">return null</span>;
+  }
+}</code></pre>
+
+            <h3>4.3 Cascade System</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">CascadeSystem</span> {
+  <span class="code-type">Future</span>&lt;<span class="code-keyword">void</span>&gt; processCascade(<span class="code-type">GameState</span> state) <span class="code-keyword">async</span> {
+    <span class="code-type">bool</span> hasChanges = <span class="code-keyword">true</span>;
+
+    <span class="code-keyword">while</span> (hasChanges) {
+      <span class="code-comment">// 1. Remove matched tiles</span>
+      <span class="code-keyword">await</span> _removeMatches(state);
+
+      <span class="code-comment">// 2. Drop tiles down</span>
+      <span class="code-keyword">await</span> _dropTiles(state);
+
+      <span class="code-comment">// 3. Fill empty spaces</span>
+      <span class="code-keyword">await</span> _fillEmptySpaces(state);
+
+      <span class="code-comment">// 4. Check for new matches</span>
+      <span class="code-keyword">final</span> newMatches = matchSystem.findMatches(state.grid);
+      hasChanges = newMatches.isNotEmpty;
+
+      <span class="code-keyword">if</span> (hasChanges) {
+        state.comboCount++;
+        <span class="code-comment">// Award combo bonus</span>
+      }
+    }
+  }
+}</code></pre>
+        </section>
+
+        <section id="flame">
+            <h2>5. Flame Game Structure</h2>
+
+            <h3>5.1 Main Game Class</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">BrainrotGame</span> <span class="code-keyword">extends</span> <span class="code-type">FlameGame</span>
+    <span class="code-keyword">with</span> <span class="code-type">HasTappables</span>, <span class="code-type">HasDraggables</span> {
+
+  <span class="code-keyword">late</span> <span class="code-type">BoardComponent</span> board;
+  <span class="code-keyword">late</span> <span class="code-type">HudComponent</span> hud;
+  <span class="code-keyword">late</span> <span class="code-type">MascotComponent</span> mascot;
+
+  <span class="code-keyword">final</span> <span class="code-type">GameState</span> gameState;
+
+  <span class="code-keyword">@override</span>
+  <span class="code-type">Future</span>&lt;<span class="code-keyword">void</span>&gt; onLoad() <span class="code-keyword">async</span> {
+    <span class="code-keyword">await</span> images.loadAll([...]); <span class="code-comment">// Preload assets</span>
+
+    board = <span class="code-type">BoardComponent</span>(gameState: gameState);
+    hud = <span class="code-type">HudComponent</span>(gameState: gameState);
+    mascot = <span class="code-type">MascotComponent</span>(brainrot: gameState.equippedBrainrot);
+
+    addAll([board, hud, mascot]);
+  }
+}</code></pre>
+
+            <h3>5.2 Tile Component</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">TileComponent</span> <span class="code-keyword">extends</span> <span class="code-type">SpriteComponent</span>
+    <span class="code-keyword">with</span> <span class="code-type">Tappable</span>, <span class="code-type">Draggable</span>, <span class="code-type">HasGameRef</span>&lt;<span class="code-type">BrainrotGame</span>&gt; {
+
+  <span class="code-keyword">final</span> <span class="code-type">GameTile</span> tile;
+  <span class="code-type">bool</span> isSelected = <span class="code-keyword">false</span>;
+
+  <span class="code-keyword">@override</span>
+  <span class="code-keyword">void</span> render(<span class="code-type">Canvas</span> canvas) {
+    <span class="code-keyword">super</span>.render(canvas);
+
+    <span class="code-keyword">if</span> (isSelected) {
+      <span class="code-comment">// Draw selection highlight</span>
+    }
+  }
+
+  <span class="code-keyword">@override</span>
+  <span class="code-type">bool</span> onDragUpdate(<span class="code-type">DragUpdateInfo</span> info) {
+    <span class="code-comment">// Detect swipe direction</span>
+    <span class="code-comment">// Trigger swap if valid</span>
+    <span class="code-keyword">return true</span>;
+  }
+}</code></pre>
+
+            <h3>5.3 Particle Effects</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">BlastEffect</span> <span class="code-keyword">extends</span> <span class="code-type">ParticleSystemComponent</span> {
+  <span class="code-type">BlastEffect</span>({<span class="code-keyword">required</span> <span class="code-type">Vector2</span> position}) : <span class="code-keyword">super</span>(
+    particle: <span class="code-type">ComposedParticle</span>(
+      children: [
+        <span class="code-comment">// Star burst</span>
+        <span class="code-type">AcceleratedParticle</span>(
+          position: position,
+          speed: <span class="code-type">Vector2</span>.random() * <span class="code-number">200</span>,
+          child: <span class="code-type">CircleParticle</span>(
+            radius: <span class="code-number">5</span>,
+            paint: <span class="code-type">Paint</span>()..color = <span class="code-type">Colors</span>.yellow
+          ),
+        ),
+        <span class="code-comment">// ... more particles</span>
+      ],
+    ),
+  );
+}
+
+<span class="code-keyword">class</span> <span class="code-type">LevelCompleteBlast</span> <span class="code-keyword">extends</span> <span class="code-type">Component</span> {
+  <span class="code-comment">// Full screen celebration effect</span>
+  <span class="code-comment">// Confetti, explosions, screen flash</span>
+}</code></pre>
+        </section>
+
+        <section id="ads">
+            <h2>6. Ad Integration</h2>
+
+            <h3>6.1 AdMob Setup</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">AdService</span> {
+  <span class="code-type">BannerAd</span>? _bannerAd;
+  <span class="code-type">RewardedAd</span>? _rewardedAd;
+  <span class="code-type">InterstitialAd</span>? _interstitialAd;
+
+  <span class="code-comment">// Ad Unit IDs (replace with real IDs)</span>
+  <span class="code-keyword">static const</span> _bannerAdUnitId = <span class="code-string">'ca-app-pub-xxx/banner'</span>;
+  <span class="code-keyword">static const</span> _rewardedAdUnitId = <span class="code-string">'ca-app-pub-xxx/rewarded'</span>;
+  <span class="code-keyword">static const</span> _interstitialAdUnitId = <span class="code-string">'ca-app-pub-xxx/interstitial'</span>;
+
+  <span class="code-type">Future</span>&lt;<span class="code-keyword">void</span>&gt; initialize() <span class="code-keyword">async</span> {
+    <span class="code-keyword">await</span> <span class="code-type">MobileAds</span>.instance.initialize();
+    _loadBannerAd();
+    _loadRewardedAd();
+    _loadInterstitialAd();
+  }
+
+  <span class="code-type">Future</span>&lt;<span class="code-type">bool</span>&gt; showRewardedAd({
+    <span class="code-keyword">required</span> <span class="code-type">RewardType</span> rewardType,
+    <span class="code-keyword">required</span> <span class="code-type">Function</span>(<span class="code-type">RewardType</span>) onRewarded,
+  }) <span class="code-keyword">async</span> {
+    <span class="code-keyword">if</span> (_rewardedAd == <span class="code-keyword">null</span>) <span class="code-keyword">return false</span>;
+
+    _rewardedAd!.show(
+      onUserEarnedReward: (ad, reward) {
+        onRewarded(rewardType);
+      },
+    );
+    <span class="code-keyword">return true</span>;
+  }
+}
+
+<span class="code-keyword">enum</span> <span class="code-type">RewardType</span> {
+  extraMoves,
+  revive,
+  doubleCoins,
+  freeChest,
+  extraSpin,
+  instantEnergy,
+}</code></pre>
+
+            <h3>6.2 Ad Placement Rules</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">AdPlacementManager</span> {
+  <span class="code-type">int</span> _levelsSinceInterstitial = <span class="code-number">0</span>;
+
+  <span class="code-type">bool</span> shouldShowInterstitial() {
+    _levelsSinceInterstitial++;
+
+    <span class="code-comment">// Show every 4-5 levels</span>
+    <span class="code-keyword">if</span> (_levelsSinceInterstitial >= <span class="code-number">4</span>) {
+      _levelsSinceInterstitial = <span class="code-number">0</span>;
+      <span class="code-keyword">return true</span>;
+    }
+    <span class="code-keyword">return false</span>;
+  }
+
+  <span class="code-comment">// Never show interstitial after failed level</span>
+  <span class="code-type">bool</span> shouldShowAfterFail() => <span class="code-keyword">false</span>;
+}</code></pre>
+        </section>
+
+        <section id="storage">
+            <h2>7. Local Storage Schema</h2>
+
+            <h3>7.1 Hive Boxes</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">StorageService</span> {
+  <span class="code-keyword">static const</span> <span class="code-type">String</span> playerBox = <span class="code-string">'player'</span>;
+  <span class="code-keyword">static const</span> <span class="code-type">String</span> settingsBox = <span class="code-string">'settings'</span>;
+  <span class="code-keyword">static const</span> <span class="code-type">String</span> cacheBox = <span class="code-string">'cache'</span>;
+
+  <span class="code-type">Future</span>&lt;<span class="code-keyword">void</span>&gt; initialize() <span class="code-keyword">async</span> {
+    <span class="code-keyword">await</span> <span class="code-type">Hive</span>.initFlutter();
+
+    <span class="code-comment">// Register adapters</span>
+    <span class="code-type">Hive</span>.registerAdapter(<span class="code-type">PlayerProgressAdapter</span>());
+    <span class="code-type">Hive</span>.registerAdapter(<span class="code-type">BrainrotRarityAdapter</span>());
+
+    <span class="code-comment">// Open boxes</span>
+    <span class="code-keyword">await</span> <span class="code-type">Hive</span>.openBox&lt;<span class="code-type">PlayerProgress</span>&gt;(playerBox);
+    <span class="code-keyword">await</span> <span class="code-type">Hive</span>.openBox(settingsBox);
+    <span class="code-keyword">await</span> <span class="code-type">Hive</span>.openBox(cacheBox);
+  }
+
+  <span class="code-type">PlayerProgress</span> getPlayer() {
+    <span class="code-keyword">final</span> box = <span class="code-type">Hive</span>.box&lt;<span class="code-type">PlayerProgress</span>&gt;(playerBox);
+    <span class="code-keyword">return</span> box.get(<span class="code-string">'player'</span>) ?? <span class="code-type">PlayerProgress</span>.initial();
+  }
+
+  <span class="code-type">Future</span>&lt;<span class="code-keyword">void</span>&gt; savePlayer(<span class="code-type">PlayerProgress</span> player) <span class="code-keyword">async</span> {
+    <span class="code-keyword">final</span> box = <span class="code-type">Hive</span>.box&lt;<span class="code-type">PlayerProgress</span>&gt;(playerBox);
+    <span class="code-keyword">await</span> box.put(<span class="code-string">'player'</span>, player);
+  }
+}</code></pre>
+        </section>
+
+        <section id="daily">
+            <h2>8. Daily Systems Implementation</h2>
+
+            <h3>8.1 Energy/Lives System</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">EnergySystem</span> {
+  <span class="code-keyword">static const</span> maxLives = <span class="code-number">5</span>;
+  <span class="code-keyword">static const</span> refillMinutes = <span class="code-number">20</span>;
+
+  <span class="code-type">int</span> calculateCurrentLives(<span class="code-type">PlayerProgress</span> player) {
+    <span class="code-keyword">if</span> (player.lives >= maxLives) <span class="code-keyword">return</span> maxLives;
+
+    <span class="code-keyword">final</span> now = <span class="code-type">DateTime</span>.now();
+    <span class="code-keyword">final</span> diff = now.difference(player.lastLifeRefill);
+    <span class="code-keyword">final</span> livesRecovered = diff.inMinutes ~/ refillMinutes;
+
+    <span class="code-keyword">return</span> min(maxLives, player.lives + livesRecovered);
+  }
+
+  <span class="code-type">Duration</span> timeUntilNextLife(<span class="code-type">PlayerProgress</span> player) {
+    <span class="code-keyword">if</span> (player.lives >= maxLives) <span class="code-keyword">return</span> <span class="code-type">Duration</span>.zero;
+
+    <span class="code-keyword">final</span> now = <span class="code-type">DateTime</span>.now();
+    <span class="code-keyword">final</span> diff = now.difference(player.lastLifeRefill);
+    <span class="code-keyword">final</span> minutesSinceRefill = diff.inMinutes % refillMinutes;
+
+    <span class="code-keyword">return</span> <span class="code-type">Duration</span>(minutes: refillMinutes - minutesSinceRefill);
+  }
+}</code></pre>
+
+            <h3>8.2 Daily Rewards</h3>
+            <pre><code><span class="code-keyword">class</span> <span class="code-type">DailyRewardSystem</span> {
+  <span class="code-keyword">static const</span> rewards = [
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">1</span>, coins: <span class="code-number">100</span>),
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">2</span>, coins: <span class="code-number">200</span>),
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">3</span>, gems: <span class="code-number">1</span>),
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">4</span>, coins: <span class="code-number">300</span>),
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">5</span>, chest: <span class="code-type">ChestType</span>.mystery),
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">6</span>, gems: <span class="code-number">3</span>),
+    <span class="code-type">DailyReward</span>(day: <span class="code-number">7</span>, brainrotRarity: <span class="code-type">BrainrotRarity</span>.rare),
+  ];
+
+  <span class="code-type">bool</span> canClaimToday(<span class="code-type">PlayerProgress</span> player) {
+    <span class="code-keyword">if</span> (player.lastDailyReward == <span class="code-keyword">null</span>) <span class="code-keyword">return true</span>;
+
+    <span class="code-keyword">final</span> now = <span class="code-type">DateTime</span>.now();
+    <span class="code-keyword">final</span> lastClaim = player.lastDailyReward!;
+
+    <span class="code-keyword">return</span> !_isSameDay(now, lastClaim);
+  }
+
+  <span class="code-type">int</span> getCurrentDay(<span class="code-type">PlayerProgress</span> player) {
+    <span class="code-keyword">if</span> (player.lastDailyReward == <span class="code-keyword">null</span>) <span class="code-keyword">return</span> <span class="code-number">1</span>;
+
+    <span class="code-keyword">final</span> now = <span class="code-type">DateTime</span>.now();
+    <span class="code-keyword">final</span> lastClaim = player.lastDailyReward!;
+
+    <span class="code-comment">// Reset streak if missed a day</span>
+    <span class="code-keyword">if</span> (now.difference(lastClaim).inDays > <span class="code-number">1</span>) {
+      <span class="code-keyword">return</span> <span class="code-number">1</span>;
+    }
+
+    <span class="code-keyword">return</span> (player.dailyStreak % <span class="code-number">7</span>) + <span class="code-number">1</span>;
+  }
+}</code></pre>
+        </section>
+
+        <section id="performance">
+            <h2>9. Performance Considerations</h2>
+
+            <h3>9.1 Asset Loading</h3>
+            <ul>
+                <li>Preload all game icons at startup</li>
+                <li>Lazy load collection images</li>
+                <li>Use sprite sheets for animations</li>
+                <li>Cache rendered text</li>
+            </ul>
+
+            <h3>9.2 Memory Management</h3>
+            <ul>
+                <li>Dispose components when leaving game screen</li>
+                <li>Clear particle effects after completion</li>
+                <li>Limit cached sprites</li>
+            </ul>
+
+            <h3>9.3 Battery Optimization</h3>
+            <ul>
+                <li>Reduce frame rate when app backgrounded</li>
+                <li>Pause animations on pause</li>
+                <li>Efficient particle pooling</li>
+            </ul>
+        </section>
+
+        <section id="testing">
+            <h2>10. Testing Strategy</h2>
+
+            <h3>10.1 Unit Tests</h3>
+            <ul>
+                <li>Level generator produces valid levels</li>
+                <li>Match detection works correctly</li>
+                <li>Score calculation accuracy</li>
+                <li>Daily systems timing</li>
+            </ul>
+
+            <h3>10.2 Widget Tests</h3>
+            <ul>
+                <li>Screen navigation</li>
+                <li>Dialog interactions</li>
+                <li>Button states</li>
+            </ul>
+
+            <h3>10.3 Integration Tests</h3>
+            <ul>
+                <li>Full game flow</li>
+                <li>Save/load functionality</li>
+                <li>Ad callbacks</li>
+            </ul>
+        </section>
+
+        <section id="build">
+            <h2>11. Build Configuration</h2>
+
+            <h3>11.1 Android</h3>
+            <pre><code><span class="code-comment">// android/app/build.gradle</span>
+android {
+    compileSdkVersion <span class="code-number">34</span>
+
+    defaultConfig {
+        applicationId <span class="code-string">"com.yourcompany.brainrotblast"</span>
+        minSdkVersion <span class="code-number">21</span>
+        targetSdkVersion <span class="code-number">34</span>
+        versionCode <span class="code-number">1</span>
+        versionName <span class="code-string">"1.0.0"</span>
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled <span class="code-keyword">true</span>
+            proguardFiles getDefaultProguardFile(<span class="code-string">'proguard-android.txt'</span>)
+        }
+    }
+}</code></pre>
+
+            <h3>11.2 iOS</h3>
+            <pre><code><span class="code-comment">&lt;!-- ios/Runner/Info.plist --&gt;</span>
+&lt;key&gt;GADApplicationIdentifier&lt;/key&gt;
+&lt;string&gt;ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy&lt;/string&gt;
+
+&lt;key&gt;SKAdNetworkItems&lt;/key&gt;
+&lt;array&gt;
+  <span class="code-comment">&lt;!-- AdMob SKAdNetwork IDs --&gt;</span>
+&lt;/array&gt;</code></pre>
+        </section>
+
+        <section id="deployment">
+            <h2>12. Deployment Checklist</h2>
+
+            <h3>Pre-Launch</h3>
+            <ul class="checklist">
+                <li>Replace test ad IDs with production IDs</li>
+                <li>Configure app signing (Android keystore, iOS certificates)</li>
+                <li>Test on multiple devices/screen sizes</li>
+                <li>Verify offline functionality</li>
+                <li>Test energy system timing</li>
+                <li>Verify daily reward reset</li>
+                <li>Performance profiling</li>
+                <li>Crashlytics/analytics setup</li>
+            </ul>
+
+            <h3>Store Listing</h3>
+            <ul class="checklist">
+                <li>App icon (1024x1024)</li>
+                <li>Screenshots (phone + tablet)</li>
+                <li>Feature graphic</li>
+                <li>Privacy policy URL</li>
+                <li>App description</li>
+                <li>Content rating questionnaire</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>
